@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AnalogicReadController } from './send-analogic-read/analogic-read.controller';
 import { TelegramController } from './telegram/telegram.controller';
 import { TelegrafModule } from 'nestjs-telegraf';
+import { TelegramService } from './telegram/telegram-service';
 
 @Module({
   imports: [
@@ -12,6 +13,6 @@ import { TelegrafModule } from 'nestjs-telegraf';
     }),
   ],
   controllers: [AnalogicReadController, TelegramController],
-  providers: [],
+  providers: [TelegramService],
 })
 export class AppModule {}
