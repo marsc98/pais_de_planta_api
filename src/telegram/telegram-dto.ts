@@ -7,7 +7,6 @@ interface TelegrafContext {
       from: object;
     };
   };
-  botInfo: object;
 }
 
 export { TelegrafContext };
