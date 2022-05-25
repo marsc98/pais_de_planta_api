@@ -36,7 +36,6 @@ export class TelegramService {
 
   @Hears(['Hi', 'Oi', 'oi', 'hi'])
   async hears(@Ctx() ctx: TelegrafContext) {
-    console.log(ctx?.update?.message?.from);
     await ctx.reply('Oiiii');
   }
 
@@ -77,7 +76,7 @@ export class TelegramService {
         );
       await ctx.reply('Você agora é oficialmente parente dessa plantinha');
     } else {
-      console.log('Não encontrado');
+      console.error('Não encontrado');
       await ctx.reply('Família não encontrada, o código deve estar errado');
     }
   }
@@ -86,17 +85,13 @@ export class TelegramService {
 @Injectable()
 export class SendMessage {
   constructor(chatId, message, @InjectBot() private bot: Telegraf<Context>) {
-    console.log('chatId: ' + chatId);
-    console.log('message: ' + message);
     try {
       const t = this?.bot?.telegram?.sendMessage(
         String(chatId),
         String(message),
       );
-      console.log(t && t);
     } catch (err) {
-      console.log('Erro:');
-      console.log(err.message);
+      console.error(err.message);
     }
   }
 }

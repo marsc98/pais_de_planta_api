@@ -29,8 +29,6 @@ export class AnalogicReadController {
           .doc(analogicRead?.familyId)
           .get();
 
-        console.log(result.data());
-
         result?.data()?.parents?.map((parent) => {
           this.telegramService.sendMessage(
             parent?.id,
@@ -46,8 +44,6 @@ export class AnalogicReadController {
           .doc(analogicRead?.familyId)
           .get();
 
-        console.log(result.data());
-
         result?.data()?.parents?.map((parent) => {
           this.telegramService.sendMessage(
             parent?.id,
@@ -57,7 +53,7 @@ export class AnalogicReadController {
       }
       return 200;
     } catch (err) {
-      console.log(err.message);
+      console.error(err.message);
       return -1;
     }
   }
