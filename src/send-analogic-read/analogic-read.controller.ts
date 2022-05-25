@@ -8,18 +8,35 @@ export class AnalogicReadController {
   constructor(private telegramService: TelegramService) {}
   @Post('/')
   async postRead(@Body() analogicRead: AnalogicReadDTO) {
+    const date = new Date();
     try {
+      const family = await firebase
+        .firestore()
+        .collection('family')
+        .doc(analogicRead?.familyId)
+        .get();
+
+      const plants = family?.data()?.plants;
+
+      const plant = family?.data()?.plants[analogicRead?.plantName];
+
+      const newMeasurements = plant?.measurements;
+      newMeasurements.push({
+        date: date,
+        measurement: analogicRead?.humidity,
+      });
+
       firebase
         .firestore()
         .collection('family')
         .doc(analogicRead?.familyId)
-        .collection('plants')
-        .doc(analogicRead?.plantName)
         .update({
-          reads: firebase.firestore.FieldValue.arrayUnion({
-            humidity: analogicRead.humidity,
-            date: new Date(),
-          }),
+          plants: {
+            ...plants,
+            [analogicRead?.plantName]: {
+              measurements: newMeasurements,
+            },
+          },
         });
 
       if (Number(analogicRead?.humidity) < 700) {
