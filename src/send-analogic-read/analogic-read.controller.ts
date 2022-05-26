@@ -24,6 +24,7 @@ export class AnalogicReadController {
       newMeasurements.push({
         date: date,
         measurement: analogicRead?.humidity,
+        isIluminated: analogicRead?.isIluminated === '0',
       });
 
       firebase
@@ -49,7 +50,7 @@ export class AnalogicReadController {
         result?.data()?.parents?.map((parent) => {
           this.telegramService.sendMessage(
             parent?.id,
-            'A sua plantinha está com muuuita água',
+            `A sua plantinha está com muuuita água, a medida está com o valor de: ${analogicRead?.humidity}`,
           );
         });
       }
@@ -64,7 +65,7 @@ export class AnalogicReadController {
         result?.data()?.parents?.map((parent) => {
           this.telegramService.sendMessage(
             parent?.id,
-            'A sua plantinha está com pouca águinha',
+            `A sua plantinha está com pouca águinha, a medida está com o valor de: ${analogicRead?.humidity}`,
           );
         });
       }
