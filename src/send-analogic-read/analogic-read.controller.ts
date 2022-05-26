@@ -40,7 +40,7 @@ export class AnalogicReadController {
           },
         });
 
-      if (Number(analogicRead?.humidity) < 700) {
+      if (Number(analogicRead?.humidity) < 400) {
         const result = await firebase
           .firestore()
           .collection('family')
@@ -55,7 +55,7 @@ export class AnalogicReadController {
         });
       }
 
-      if (Number(analogicRead?.humidity) > 900) {
+      if (Number(analogicRead?.humidity) > 700) {
         const result = await firebase
           .firestore()
           .collection('family')
