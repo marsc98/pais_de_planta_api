@@ -56,28 +56,37 @@ export class TelegramService {
       .collection('family')
       .doc(ctx.update.message.text)
       .get();
-    if (family?.data()) {
-      firebase
-        .firestore()
-        .collection('family')
-        .doc(ctx?.update?.message?.text)
-        .set(
-          {
-            parents: [
-              ...family?.data().parents,
-              {
-                id: ctx?.update?.message?.chat?.id,
-                name: ctx?.update?.message?.chat?.first_name,
-                userName: ctx?.update?.message?.chat?.username,
-              },
-            ],
-          },
-          { merge: true },
-        );
-      await ctx.reply('Você agora é oficialmente parente dessa plantinha');
-    } else {
-      console.error('Não encontrado');
-      await ctx.reply('Família não encontrada, o código deve estar errado');
+
+    const parents = family?.data()?.parents;
+
+    const newParents = [
+      ...parents,
+      {
+        id: ctx?.update?.message?.chat?.id,
+        name: ctx?.update?.message?.chat?.first_name,
+        userName: ctx?.update?.message?.chat?.username || 'private',
+      },
+    ];
+
+    try {
+      if (family?.data()) {
+        firebase
+          .firestore()
+          .collection('family')
+          .doc(ctx?.update?.message?.text)
+          .set(
+            {
+              parents: newParents,
+            },
+            { merge: true },
+          );
+        await ctx.reply('Você agora é oficialmente parente dessa plantinha');
+      } else {
+        console.error('Não encontrado');
+        await ctx.reply('Família não encontrada, o código deve estar errado');
+      }
+    } catch (err) {
+      console.error(err.message);
     }
   }
 }
