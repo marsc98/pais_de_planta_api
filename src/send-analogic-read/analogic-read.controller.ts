@@ -40,7 +40,7 @@ export class AnalogicReadController {
           },
         });
 
-      if (Number(analogicRead?.humidity) < 500) {
+      if (Number(analogicRead?.humidity) > 90) {
         const result = await firebase
           .firestore()
           .collection('family')
@@ -50,12 +50,12 @@ export class AnalogicReadController {
         result?.data()?.parents?.map((parent) => {
           this.telegramService.sendMessage(
             parent?.id,
-            `A sua plantinha está com muuuita água, a medida está com o valor de: ${analogicRead?.humidity}`,
+            `Olá, a sua plantinha está com muuuita água, a medida está com o valor de: ${analogicRead?.humidity}`,
           );
         });
       }
 
-      if (Number(analogicRead?.humidity) > 800) {
+      if (Number(analogicRead?.humidity) < 60) {
         const result = await firebase
           .firestore()
           .collection('family')
@@ -65,7 +65,7 @@ export class AnalogicReadController {
         result?.data()?.parents?.map((parent) => {
           this.telegramService.sendMessage(
             parent?.id,
-            `A sua plantinha está com pouca águinha, a medida está com o valor de: ${analogicRead?.humidity}`,
+            `Olá, sua plantinha está com pouca águinha, a medida está com o valor de: ${analogicRead?.humidity}`,
           );
         });
       }
